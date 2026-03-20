@@ -1,0 +1,33 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:15432/item_db?currentSchema=item
+    username: itemuser
+    password: itempassword
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        check_nullability: true
+        default_schema: auth
+      org:
+        hibernate:
+          envers:
+            audit_table_suffix: _audit
+            revision_field_name: revision_id
+            revision_type_field_name: revision_type
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+
+server:
+  port: 8000
+
+logging:
+  level:
+    web: debug
+
+application:
+  jwt:
+    secret-key: MzE5d0FzN0ZQcDJyOUlYZnlpU2R5V0FLQXhGNWRtMHc
+    expiration-ms: 3600000
