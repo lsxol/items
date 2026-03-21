@@ -37,4 +37,8 @@ public final class ItemExceptionUtil {
     return new CannotDeleteItemException();
   }
 
+  public static ItemException invalidCredentials() {
+    return new InvalidCredentialsException();
+  }
+
 }

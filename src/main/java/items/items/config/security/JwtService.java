@@ -26,14 +26,16 @@ class JwtService implements TokenProviderPort {
   }
 
   @Override
-  public String generateToken(User user) {
-    return Jwts.builder()
+  public TokenInfo generateToken(User user) {
+    String token = Jwts.builder()
         .subject(user.getLoginWithPassword().login().login())
         .issuedAt(new Date())
         .expiration(new Date(new Date().getTime() + expirationTime))
         .claim("userId", user.getId().value().toString())
         .signWith(secretKey)
         .compact();
+    int expirationTimeInSeconds = (int) (expirationTime / 1000);
+    return new TokenInfo(token, expirationTimeInSeconds);
   }
 
   private Claims extractAllClaims(String token) {

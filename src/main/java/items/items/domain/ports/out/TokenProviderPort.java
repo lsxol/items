@@ -4,6 +4,8 @@ import items.items.domain.model.User;
 
 public interface TokenProviderPort {
 
-  String generateToken(User user);
+  TokenInfo generateToken(User user);
+
+  record TokenInfo(String token, int expiresInSeconds) {}
 
 }

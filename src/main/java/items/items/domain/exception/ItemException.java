@@ -17,6 +17,7 @@ public class ItemException extends RuntimeException {
   public enum ErrorCode {
     INVALID_USER(ErrorCategory.BAD_REQUEST),
     LOGIN_INVALID(ErrorCategory.BAD_REQUEST),
+    INVALID_CREDENTIALS(ErrorCategory.INVALID_CREDENTIALS),
     PASSWORD_INVALID(ErrorCategory.BAD_REQUEST),
     ITEM_INVALID(ErrorCategory.BAD_REQUEST),
     USER_ALREADY_EXISTS(ErrorCategory.CONFLICT),
@@ -32,6 +33,7 @@ public class ItemException extends RuntimeException {
     BAD_REQUEST,
     FORBIDDEN,
     SYSTEM_ERROR,
+    INVALID_CREDENTIALS,
     TOO_MANY_REQUESTS
   }
 
