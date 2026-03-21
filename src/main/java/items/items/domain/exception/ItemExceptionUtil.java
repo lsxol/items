@@ -9,6 +9,10 @@ public final class ItemExceptionUtil {
     return new LoginInvalidException();
   }
 
+  public static ItemException loginInUse() {
+    return new LoginInUseException();
+  }
+
   public static ItemException passwordInvalid() {
     return new PasswordInvalidException();
   }
@@ -17,7 +21,7 @@ public final class ItemExceptionUtil {
     return new UserDataInvalidException();
   }
 
-  public static ItemException itemInvalidException() {
+  public static ItemException itemInvalid() {
     return new ItemInvalidException();
   }
 

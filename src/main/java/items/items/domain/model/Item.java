@@ -18,7 +18,7 @@ public class Item {
 
   public static Item createNew(UserId ownerId, String title, String content) {
     if (title == null || title.isBlank()) {
-      throw ItemExceptionUtil.itemInvalidException();
+      throw ItemExceptionUtil.itemInvalid();
     }
     return new Item(
         ItemId.generate(),
@@ -32,7 +32,7 @@ public class Item {
 
   public void update(String newTitle, String newContent, UserId editorId) {
     if (newTitle == null || newTitle.isBlank()) {
-      throw ItemExceptionUtil.itemInvalidException();
+      throw ItemExceptionUtil.itemInvalid();
     }
     if (!canEdit(editorId)) {
       throw ItemExceptionUtil.cannotEditItem();

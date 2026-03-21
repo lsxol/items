@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import items.items.domain.model.User;
 import items.items.domain.ports.out.TokenProviderPort;
 import java.util.Date;
+import java.util.UUID;
 import javax.crypto.SecretKey;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -47,9 +48,14 @@ class JwtService implements TokenProviderPort {
     return extractAllClaims(token).getSubject();
   }
 
-  public boolean isTokenValid(String token, String email) {
-    final String tokenEmail = extractLogin(token);
-    return (tokenEmail.equals(email)) && !isTokenExpired(token);
+  public UUID extractUserId(String token) {
+    String userIdString = extractAllClaims(token).get("userId", String.class);
+    return UUID.fromString(userIdString);
+  }
+
+  public boolean isTokenValid(String token, String login) {
+    final String tokenLogin = extractLogin(token);
+    return (tokenLogin.equals(login)) && !isTokenExpired(token);
   }
 
   private boolean isTokenExpired(String token) {

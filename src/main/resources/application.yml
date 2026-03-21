@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:15432/item_db?currentSchema=item
+    url: jdbc:mysql://localhost:13306/item_db?currentSchema=item
     username: itemuser
     password: itempassword
   jpa:
@@ -9,7 +9,7 @@ spring:
       hibernate:
         format_sql: true
         check_nullability: true
-        default_schema: auth
+        default_schema: item
       org:
         hibernate:
           envers:
@@ -19,6 +19,11 @@ spring:
     open-in-view: false
     hibernate:
       ddl-auto: validate
+
+  liquibase:
+    default-schema: item
+    enabled: true
+    change-log: classpath:/db/changelog/changelog-master.yaml
 
 server:
   port: 8000
