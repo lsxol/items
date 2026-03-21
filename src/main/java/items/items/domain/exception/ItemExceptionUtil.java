@@ -41,4 +41,12 @@ public final class ItemExceptionUtil {
     return new InvalidCredentialsException();
   }
 
+  public static ItemException invalidItemData() {
+    return new InvalidItemData();
+  }
+
+  public static ItemException optimisticLock(Integer version) {
+    return new OptimisticLockException(version);
+  }
+
 }

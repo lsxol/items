@@ -7,6 +7,6 @@ public enum RoleEnum {
   VIEWER, EDITOR, OWNER;
 
   public boolean canEdit() {
-    return this.equals(EDITOR) || this.equals(OWNER);
+    return this.equals(EDITOR);
   }
 }

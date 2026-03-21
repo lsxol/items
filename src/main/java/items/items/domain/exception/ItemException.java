@@ -16,8 +16,10 @@ public class ItemException extends RuntimeException {
   @AllArgsConstructor
   public enum ErrorCode {
     INVALID_USER(ErrorCategory.BAD_REQUEST),
+    ITEM_NOT_EXISTS(ErrorCategory.NOT_FOUND),
     LOGIN_INVALID(ErrorCategory.BAD_REQUEST),
     INVALID_CREDENTIALS(ErrorCategory.INVALID_CREDENTIALS),
+    WRONG_VERSION(ErrorCategory.CONFLICT),
     PASSWORD_INVALID(ErrorCategory.BAD_REQUEST),
     ITEM_INVALID(ErrorCategory.BAD_REQUEST),
     USER_ALREADY_EXISTS(ErrorCategory.CONFLICT),

@@ -2,13 +2,15 @@ package items.items.domain.ports.out;
 
 import items.items.domain.model.Item;
 import items.items.domain.model.ItemId;
+import java.time.LocalDateTime;
 import java.util.Optional;
-import java.util.UUID;
 
 public interface ItemRepository {
 
-  Item save(Item item);
+  SavedItemAuditData save(Item item);
+  SavedItemAuditData save(Item item, int version);
 
-  Optional<Item> findById(ItemId id);
+  Optional<Item> findByIdAndDeletedFalse(ItemId id);
 
+  record SavedItemAuditData(int version, LocalDateTime createdAt, LocalDateTime updatedAt) {}
 }

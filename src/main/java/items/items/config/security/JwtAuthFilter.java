@@ -34,23 +34,22 @@ class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     final String jwt = authHeader.substring(7);
+    final String login = jwtService.extractLogin(jwt);
+    final UUID userId = jwtService.extractUserId(jwt);
 
-    try {
-      final String login = jwtService.extractLogin(jwt);
-      final UUID userId = jwtService.extractUserId(jwt);
+    if (login != null && SecurityContextHolder.getContext().getAuthentication() == null) {
 
-      if (login != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-
+      if (jwtService.isTokenValid(jwt, login)) {
         AuthDto authDto = new AuthDto(userId, login);
-
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
             authDto, null, List.of()
         );
         SecurityContextHolder.getContext().setAuthentication(authToken);
       }
-    } catch (Exception e) {
+
     }
 
     filterChain.doFilter(request, response);
   }
+
 }

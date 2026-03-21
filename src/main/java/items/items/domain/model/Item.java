@@ -1,7 +1,9 @@
 package items.items.domain.model;
 
 import items.items.domain.exception.ItemExceptionUtil;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -17,7 +19,7 @@ public class Item {
   private List<ItemPermission> permissions;
 
   public static Item createNew(UserId ownerId, String title, String content) {
-    if (title == null || title.isBlank()) {
+    if (title == null || title.isBlank() || title.length() > 255) {
       throw ItemExceptionUtil.itemInvalid();
     }
     return new Item(
@@ -26,7 +28,7 @@ public class Item {
         title,
         content,
         false,
-        List.of()
+        new ArrayList<>()
     );
   }
 
@@ -55,8 +57,37 @@ public class Item {
     this.deleted = true;
   }
 
+  public void shareWith(UserId targetUserId, RoleEnum role, UserId requesterId) {
+    if (!this.ownerId.equals(requesterId)) {
+      throw ItemExceptionUtil.cannotEditItem();
+    }
+    if (this.ownerId.equals(targetUserId)) {
+      throw ItemExceptionUtil.invalidItemData();
+    }
+    Optional<ItemPermission> existingPermission = this.permissions.stream()
+        .filter(p -> p.getUserId().equals(targetUserId))
+        .findFirst();
+    if (existingPermission.isPresent()) {
+      existingPermission.get().changeRole(role);
+    } else {
+      this.permissions.add(ItemPermission.createNew(targetUserId, role));
+    }
+  }
+
+  public void revokeAccess(UserId targetUserId, UserId requesterId) {
+    if (!this.ownerId.equals(requesterId)) {
+      throw ItemExceptionUtil.cannotEditItem();
+    }
+
+    if (this.ownerId.equals(targetUserId)) {
+      throw ItemExceptionUtil.invalidItemData();
+    }
+    this.permissions.removeIf(p -> p.getUserId().equals(targetUserId));
+
+  }
+
   private boolean canEdit(UserId userId) {
-    return permissions.stream()
+    return ownerId.equals(userId) || permissions.stream()
         .anyMatch(itemPermission -> itemPermission.getUserId().equals(userId) && itemPermission.getRole().canEdit());
   }
 

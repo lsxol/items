@@ -5,7 +5,7 @@ import items.items.domain.model.UserId;
 
 public interface DeletePermissionUseCase {
 
-  void deletePermision(DeletePermissionCommand command);
+  void deletePermission(DeletePermissionCommand command);
 
   record DeletePermissionCommand(ItemId itemId, UserId userId) {
 

@@ -19,4 +19,8 @@ public class ItemPermission {
     );
   }
 
+  public void changeRole(RoleEnum role) {
+    this.role = role;
+  }
+
 }
