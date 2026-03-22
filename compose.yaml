@@ -1,12 +1,35 @@
 services:
-  mysql:
-    image: 'mysql:latest'
+  db:
+    # Używamy tej samej, stabilnej wersji co w Testcontainers
+    image: mysql:8.0.32
+    container_name: items_mysql
     environment:
-      - 'MYSQL_DATABASE=item'
-      - 'MYSQL_PASSWORD=itempassword'
-      - 'MYSQL_ROOT_PASSWORD=itempassword'
-      - 'MYSQL_USER=itemuser'
+      MYSQL_DATABASE: item
+      MYSQL_USER: itemuser
+      MYSQL_PASSWORD: itempassword
+      MYSQL_ROOT_PASSWORD: rootpassword
     ports:
       - '13306:3306'
     volumes:
-      - ./init_db/docker-entrypoint-initdb.d
+      - db_data:/var/lib/mysql
+      - ./init_db:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  app:
+    build: .
+    container_name: items_app
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/item
+      SPRING_DATASOURCE_USERNAME: itemuser
+      SPRING_DATASOURCE_PASSWORD: itempassword
+
+volumes:
+  db_data:

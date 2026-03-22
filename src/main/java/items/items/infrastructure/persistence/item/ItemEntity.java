@@ -15,9 +15,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.envers.Audited;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
+import org.hibernate.envers.NotAudited;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "items")
@@ -30,30 +33,35 @@ public class ItemEntity {
 
   @Id
   @Column(length = 36)
+  @JdbcTypeCode(SqlTypes.VARCHAR)
   private UUID id;
 
   @Column(name = "owner_id", nullable = false, length = 36)
+  @JdbcTypeCode(SqlTypes.VARCHAR)
   private UUID ownerId;
 
-  @Column(nullable = false, length = 255)
+  @Column(nullable = false)
   private String title;
 
   @Column(columnDefinition = "TEXT")
   private String content;
 
-  @Version // 3. Wymaganie: Optimistic locking! Hibernate sam podbije tę cyferkę przy update
+  @Version
   @Column(nullable = false)
+  @NotAudited
   private Integer version;
 
   @Column(nullable = false)
   private boolean deleted;
 
-  @Column(name = "created_at", nullable = false, updatable = false)
-  @CreatedDate
+  @Column(name = "created_at", updatable = false)
+  @CreationTimestamp
+  @NotAudited
   private LocalDateTime createdAt;
 
-  @Column(name = "updated_at", nullable = false)
-  @LastModifiedDate
+  @Column(name = "updated_at")
+  @UpdateTimestamp
+  @NotAudited
   private LocalDateTime updatedAt;
 
   @OneToMany(mappedBy = "item", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -65,8 +73,4 @@ public class ItemEntity {
     permission.setItem(this);
   }
 
-  public void removePermission(ItemPermissionEntity permission) {
-    permissions.remove(permission);
-    permission.setItem(null);
-  }
 }

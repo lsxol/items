@@ -10,6 +10,7 @@ import items.items.domain.ports.out.ItemRepository;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +19,7 @@ class DeleteItemUseCaseImpl implements DeleteItemUseCase {
   private final ItemRepository itemRepository;
 
   @Override
+  @Transactional
   public void deleteItem(UUID id) {
     UserId requesterId = new UserId(AuthHelper.getAuth().userId());
 

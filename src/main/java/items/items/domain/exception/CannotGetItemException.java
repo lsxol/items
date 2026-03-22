@@ -1,8 +1,8 @@
 package items.items.domain.exception;
 
-class CannotEditItemException extends ItemException {
+class CannotGetItemException extends ItemException {
 
-  CannotEditItemException() {
+  CannotGetItemException() {
     super(ErrorCode.USER_NOT_AUTHORIZED);
   }
 

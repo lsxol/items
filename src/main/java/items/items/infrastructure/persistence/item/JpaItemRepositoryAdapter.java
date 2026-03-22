@@ -3,11 +3,12 @@ package items.items.infrastructure.persistence.item;
 import items.items.domain.exception.ItemExceptionUtil;
 import items.items.domain.model.Item;
 import items.items.domain.model.ItemId;
-import items.items.domain.model.ItemPermissionId;
 import items.items.domain.model.UserId;
 import items.items.domain.ports.out.ItemRepository;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,8 +20,8 @@ public class JpaItemRepositoryAdapter implements ItemRepository {
 
   @Override
   public SavedItemAuditData save(Item item) {
-
-    ItemEntity entity = new ItemEntity();
+    ItemEntity entity = itemRepository.findById(item.getId().value())
+        .orElseGet(ItemEntity::new);
     entity.setId(item.getId().value());
     entity.setOwnerId(item.getOwnerId().value());
     entity.setTitle(item.getTitle());
@@ -65,16 +66,30 @@ public class JpaItemRepositoryAdapter implements ItemRepository {
   }
 
   private void mapPermissionsToEntity(Item item, ItemEntity entity) {
-    if (entity.getPermissions() != null) {
-      entity.getPermissions().clear();
+    if (item.getPermissions() == null) {
+      return;
     }
 
-    if (item.getPermissions() != null) {
-      for (var domenaPerm : item.getPermissions()) {
+    List<UUID> domainUserIds = item.getPermissions().stream()
+        .map(p -> p.getUserId().value())
+        .toList();
+
+    if (entity.getPermissions() != null) {
+      entity.getPermissions().removeIf(permEntity ->
+          !domainUserIds.contains(permEntity.getUserId())
+      );
+    }
+
+    for (var domenaPerm : item.getPermissions()) {
+      Optional<ItemPermissionEntity> existingPerm = entity.getPermissions().stream()
+          .filter(permission -> permission.getUserId().equals(domenaPerm.getUserId().value()))
+          .findFirst();
+
+      if (existingPerm.isPresent()) {
+        existingPerm.get().setRole(domenaPerm.getRole());
+      } else {
         ItemPermissionEntity permEntity = new ItemPermissionEntity();
-
-        permEntity.setId(domenaPerm.getId() != null ? domenaPerm.getId().value() : ItemPermissionId.generate().value());
-
+        permEntity.setId(domenaPerm.getId() != null ? domenaPerm.getId().value() : UUID.randomUUID());
         permEntity.setUserId(domenaPerm.getUserId().value());
         permEntity.setRole(domenaPerm.getRole());
 
@@ -89,7 +104,7 @@ public class JpaItemRepositoryAdapter implements ItemRepository {
         itemEntity.getTitle(),
         itemEntity.getContent(),
         itemEntity.isDeleted(),
-        List.of());
+        new ArrayList<>());
   }
 
 }

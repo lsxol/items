@@ -10,14 +10,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.envers.Audited;
+import org.hibernate.type.SqlTypes;
 
 @Entity
 @Table(name = "item_permissions")
@@ -30,20 +30,20 @@ public class ItemPermissionEntity {
 
   @Id
   @Column(length = 36)
+  @JdbcTypeCode(SqlTypes.VARCHAR)
   private UUID id;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "item_id", nullable = false)
+  @JdbcTypeCode(SqlTypes.VARCHAR)
   private ItemEntity item;
 
   @Column(name = "user_id", nullable = false, length = 36)
+  @JdbcTypeCode(SqlTypes.VARCHAR)
   private UUID userId;
 
   @Enumerated(EnumType.STRING)
   @Column(nullable = false, length = 20)
   private RoleEnum role;
 
-  @CreationTimestamp
-  @Column(name = "granted_at", nullable = false, updatable = false)
-  private LocalDateTime grantedAt;
 }

@@ -29,6 +29,10 @@ public final class ItemExceptionUtil {
     return new CannotEditItemException();
   }
 
+  public static ItemException cannotGetItem() {
+    return new CannotGetItemException();
+  }
+
   public static ItemException itemNotExists() {
     return new ItemNotExistsException();
   }

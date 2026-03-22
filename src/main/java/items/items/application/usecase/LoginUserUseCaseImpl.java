@@ -10,6 +10,7 @@ import items.items.domain.ports.out.UserRepositoryPort;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,6 +21,7 @@ public class LoginUserUseCaseImpl implements LoginUserUseCase {
   private final TokenProviderPort tokenProviderPort;
 
   @Override
+  @Transactional
   public LoginUserResponse loginUser(LoginUserCommand command) {
     Login login = new Login(command.username());
     User user = userRepositoryPort.findByLogin(login)

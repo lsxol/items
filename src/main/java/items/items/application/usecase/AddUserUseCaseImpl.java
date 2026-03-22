@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -21,6 +22,7 @@ class AddUserUseCaseImpl implements AddUserUseCase {
   private final PasswordEncoder passwordEncoder;
 
   @Override
+  @Transactional
   public AddUserResponse addUser(AddUserCommand command) {
     Login login = new Login(command.username());
     if (userRepositoryPort.existsByLogin(login)) {

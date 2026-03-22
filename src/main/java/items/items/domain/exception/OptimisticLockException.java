@@ -1,9 +1,15 @@
 package items.items.domain.exception;
 
-class OptimisticLockException extends ItemException {
+import lombok.Getter;
 
-  OptimisticLockException(int version) {
+@Getter
+public class OptimisticLockException extends ItemException {
+
+  private final int version;
+
+  public OptimisticLockException(int version) {
     super("Konflikt wersji - ktoś inny zmodyfikował notatkę w międzyczasie. Aktualna wersja: " + version, ErrorCode.WRONG_VERSION);
+    this.version = version;
   }
 
 }

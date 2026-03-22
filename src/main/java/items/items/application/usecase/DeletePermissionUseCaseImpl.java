@@ -8,6 +8,7 @@ import items.items.domain.ports.in.DeletePermissionUseCase;
 import items.items.domain.ports.out.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -16,6 +17,7 @@ class DeletePermissionUseCaseImpl implements DeletePermissionUseCase {
   private final ItemRepository itemRepository;
 
   @Override
+  @Transactional
   public void deletePermission(DeletePermissionCommand command) {
     UserId requesterId = new UserId(AuthHelper.getAuth().userId());
     Item item = itemRepository.findByIdAndDeletedFalse(command.itemId())

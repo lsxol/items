@@ -26,7 +26,7 @@ public class AuditableRevisionEntity {
   private Integer id;
 
   @RevisionTimestamp
-  @Column(name = "rev_timestamp")
+  @Column(name = "revtstmp")
   private Long timestamp;
 
   @Column(name = "changed_by", length = 64)
