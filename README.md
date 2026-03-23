@@ -9,7 +9,8 @@ REST API do zarządzania notatkami.
 * Testy: Mockito, Testcontainers
 * Konteneryzacja: Docker
 
-Uruchomienie aplikacji wymaga jedynie użycia "docker-compose up -d" w terminalu folderu z aplikacją
+Uruchomienie aplikacji wymaga jedynie użycia "docker-compose up -d" w terminalu folderu z aplikacją.
+Swagger dostępny jest pod portem 8000.
 
 W aplikacji wykorzystałem architekturę heksagonalną, trochę o niej już czytałem i bawiłem się z nią wcześniej, więc chciałem 
 utrwalić sobie wiedzę. Na wymagania projektowe to za dużo, ale jeśli miałem spędzać czas na budowaniu tej aplikacji to chciałem 

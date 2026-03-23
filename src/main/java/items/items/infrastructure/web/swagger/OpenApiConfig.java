@@ -17,7 +17,7 @@ public class OpenApiConfig {
 
     return new OpenAPI()
         .info(new Info()
-            .title("Items API - Betacom")
+            .title("Items REST API")
             .version("1.0")
             .description("Dokumentacja API dla aplikacji do zarządzania notatkami i uprawnieniami"))
         .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
